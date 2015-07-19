@@ -3,3 +3,4 @@ Miscellaneous utility programs. See
 
 - `gifdrop` - drop frames from an (unoptimized) animated GIF
 - `hueview` - display colors
+- `tmpsrv` - serve files over HTTP
