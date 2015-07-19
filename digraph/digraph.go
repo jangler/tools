@@ -1265,6 +1265,6 @@ func main() {
 		}
 	} else {
 		s := strings.Join(os.Args[1:], " ")
-		fmt.Println(process(s))
+		fmt.Print(process(s))
 	}
 }
