@@ -4,4 +4,5 @@ Miscellaneous public domain utility programs. See
 - `digraph` - echo Vim-style digraphs
 - `gifdrop` - drop frames from an (unoptimized) animated GIF
 - `hueview` - display colors
+- `itdump` - dump samples from an Impulse Tracker module
 - `tmpsrv` - serve files over HTTP
