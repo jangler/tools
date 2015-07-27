@@ -13,12 +13,17 @@ const description = `
 Dump all samples from the given IT modules to the working directory.
 `
 
+var itsFlag bool
+
 func parseFlags() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s <file>...\n", os.Args[0])
-		fmt.Fprint(os.Stderr, description)
+		fmt.Fprintln(os.Stderr, description)
+		fmt.Fprintln(os.Stderr, "Options:")
+		flag.PrintDefaults()
 		os.Exit(2)
 	}
+	flag.BoolVar(&itsFlag, "its", itsFlag, "dump in ITS format instead of WAV")
 	flag.Parse()
 	if flag.NArg() == 0 {
 		flag.Usage()
@@ -26,27 +31,34 @@ func parseFlags() {
 }
 
 func dumpSample(source string, index int, sample *impulse.Sample) error {
-	waveFile := wave.File{
-		Channels:       1,
-		SampleRate:     int(sample.Speed),
-		BytesPerSample: 1,
-		Data:           sample.Data,
+	ext := "wav"
+	if itsFlag {
+		ext = "its"
 	}
-	if sample.Flags&impulse.StereoSample != 0 {
-		waveFile.Channels = 2
-	}
-	if sample.Flags&impulse.Quality16Bit != 0 {
-		waveFile.BytesPerSample = 2
-	}
-
-	filename := fmt.Sprintf("%s-%03d.wav", source[:len(source)-3], index)
+	filename := fmt.Sprintf("%s-%03d.%s", source[:len(source)-3], index, ext)
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
-	return waveFile.Write(file)
+	if itsFlag {
+		return sample.Write(file)
+	} else {
+		waveFile := wave.File{
+			Channels:       1,
+			SampleRate:     int(sample.Speed),
+			BytesPerSample: 1,
+			Data:           sample.Data,
+		}
+		if sample.Flags&impulse.StereoSample != 0 {
+			waveFile.Channels = 2
+		}
+		if sample.Flags&impulse.Quality16Bit != 0 {
+			waveFile.BytesPerSample = 2
+		}
+		return waveFile.Write(file)
+	}
 }
 
 func dumpFile(filename string) error {
