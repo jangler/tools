@@ -74,6 +74,9 @@ func dumpFile(filename string) error {
 	}
 
 	for i, sample := range module.Samples {
+		if sample.Length == 0 {
+			continue
+		}
 		if err := dumpSample(filename, i, sample); err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s: %v\n", os.Args[0], filename, err)
 		}
