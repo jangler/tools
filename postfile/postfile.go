@@ -13,7 +13,7 @@ import (
 
 // command-line flags
 var (
-	echo  = flag.Bool("echo", true, "print response to standard output")
+	echo  = flag.Bool("echo", false, "print response to standard output")
 	field = flag.String("field", "file", "name of form field")
 )
 
