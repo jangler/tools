@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"time"
 
 	"github.com/peterh/liner"
 )
@@ -13,6 +14,8 @@ import (
 var diceRegexp = regexp.MustCompile(`^(\d+)d(\d+) *((-|\+) *(\d+))?$`)
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	line := liner.NewLiner()
 	defer line.Close()
 
